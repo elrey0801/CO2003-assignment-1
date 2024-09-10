@@ -307,24 +307,38 @@ typename DLinkedList<T>::Node *DLinkedList<T>::getPreviousNodeOf(int index)
      * Efficiently navigates to the node by choosing the shorter path based on the index's position.
      */
     // TODO
+    int half = this->count / 2;
+    Node* ptr = nullptr;
+    if(index <= half) {
+        ptr = this->head;
+        while(index--) ptr = ptr->next;
+    } else {
+        ptr = this->tail;
+        index -= this->count;
+        while(index--) ptr = ptr->prev;
+    }
+    return ptr;
 }
 
 template <class T>
 T DLinkedList<T>::removeAt(int index)
 {
     // TODO
+    if(index < 0 || index >= this->count) throw std::out_of_range("Invalid index");
 }
 
 template <class T>
 bool DLinkedList<T>::empty()
 {
     // TODO
+    return this->count == 0;
 }
 
 template <class T>
 int DLinkedList<T>::size()
 {
     // TODO
+    return this->count;
 }
 
 template <class T>
@@ -337,12 +351,24 @@ template <class T>
 T &DLinkedList<T>::get(int index)
 {
     // TODO
+    if(index < 0 || index >= this->count) throw std::out_of_range("Invalid index");
+    Node* ptr = this->head->next;
+    while(index--) ptr = ptr->next;
+    return ptr->data;
 }
 
 template <class T>
 int DLinkedList<T>::indexOf(T item)
 {
     // TODO
+    int idx = 0;
+    Node* ptr = this->head->next;
+    while(ptr != this->tail) {
+        if(equals(ptr->data, item, this->itemEqual)) return idx;
+        idx++;
+        ptr = ptr->next;
+    }
+    return -1;
 }
 
 template <class T>
@@ -355,6 +381,7 @@ template <class T>
 bool DLinkedList<T>::contains(T item)
 {
     // TODO
+    return this->indexOf(item) != -1;
 }
 
 template <class T>

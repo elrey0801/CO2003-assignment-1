@@ -10,7 +10,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
     cout << "Assignment-1" << endl;
-    dlistDemo1();
+    dlistDemo4();
     return 0;
 }
 
