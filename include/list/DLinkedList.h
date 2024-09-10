@@ -245,6 +245,13 @@ DLinkedList<T>::DLinkedList(
     bool (*itemEqual)(T &, T &))
 {
     // TODO
+    this->head = new Node();
+    this->tail = new Node();
+    this->head->next = tail;
+    this->tail->prev = head;
+    this->deleteUserData = deleteUserData;
+    this->itemEqual = itemEqual;
+    this->count = 0;
 }
 
 template <class T>
@@ -269,11 +276,26 @@ template <class T>
 void DLinkedList<T>::add(T e)
 {
     // TODO
+    Node* newNode = new Node(e);
+    newNode->prev = this->tail->prev;
+    newNode->next = this->tail;
+    newNode->prev->next = newNode;
+    this->tail->prev = newNode;
+    this->count++;
 }
 template <class T>
 void DLinkedList<T>::add(int index, T e)
 {
     // TODO
+    if(index < 0 || index > this->count) throw std::out_of_range("Invalid index");
+    Node* ptr = this->head;
+    while(index--) ptr = ptr->next;
+    Node* newNode = new Node(e);
+    newNode->next = ptr->next;
+    newNode->prev = ptr;
+    ptr->next = newNode;
+    newNode->next->prev = newNode;
+    this->count++;
 }
 
 template <class T>
@@ -347,6 +369,17 @@ string DLinkedList<T>::toString(string (*item2str)(T &))
      * @return A string representation of the list with elements separated by commas and enclosed in square brackets.
      */
     // TODO
+    stringstream s;
+    s << "[";
+    Node* ptr = this->head->next;
+    while(ptr != this->tail) {
+        if(item2str) s << item2str(ptr->data);
+        else s << ptr->data;
+        if(ptr != this->tail->prev) s << ", ";
+        ptr = ptr->next;
+    }
+    s << "]";
+    return s.str();
 }
 
 template <class T>
