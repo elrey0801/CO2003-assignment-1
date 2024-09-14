@@ -3,15 +3,18 @@
 #include <sstream>
 #include "DLinkedList.h"
 #include "util/Point.h"
+#include "DLinkedListDemo.h"
 
 using namespace std;
 
 // Helper function to convert int to string
-string intToString(int& i) {
+string intToString(int &i)
+{
     return to_string(i);
 }
 
-void testConstructor() {
+void testConstructor()
+{
     cout << "Testing Constructor:" << endl;
     DLinkedList<int> list;
     assert(list.empty());
@@ -19,55 +22,63 @@ void testConstructor() {
     cout << "Constructor test passed." << endl;
 }
 
-void testCopyConstructor() {
+void testCopyConstructor()
+{
     cout << "Testing Copy Constructor:" << endl;
     DLinkedList<int> list1;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list1.add(i);
     }
-    
+
     DLinkedList<int> list2(list1);
     assert(list2.size() == list1.size());
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         assert(list2.get(i) == list1.get(i));
     }
-    
+
     // Modify list2 to ensure deep copy
     list2.removeAt(0);
     list2.add(0, 10);
     assert(list1.get(0) != list2.get(0));
-    
+
     cout << "Copy Constructor test passed." << endl;
 }
 
-void testAssignmentOperator() {
+void testAssignmentOperator()
+{
     cout << "Testing Assignment Operator:" << endl;
     DLinkedList<int> list1;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list1.add(i);
     }
-    
+
     DLinkedList<int> list2;
     list2 = list1;
     assert(list2.size() == list1.size());
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         assert(list2.get(i) == list1.get(i));
     }
-    
+
     // Modify list2 to ensure deep copy
     list2.removeAt(0);
     list2.add(0, 10);
     assert(list1.get(0) != list2.get(0));
-    
+
     cout << "Assignment Operator test passed." << endl;
 }
 
-void testAdd() {
+void testAdd()
+{
     cout << "Testing Add methods:" << endl;
     DLinkedList<int> list;
 
     // Test add(T e)
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i);
     }
     assert(list.size() == 5);
@@ -91,10 +102,12 @@ void testAdd() {
     cout << "Add methods test passed." << endl;
 }
 
-void testRemoveAt() {
+void testRemoveAt()
+{
     cout << "Testing RemoveAt method:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i);
     }
 
@@ -117,10 +130,12 @@ void testRemoveAt() {
     cout << "RemoveAt method test passed." << endl;
 }
 
-void testRemoveItem() {
+void testRemoveItem()
+{
     cout << "Testing RemoveItem method:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i);
     }
 
@@ -134,10 +149,12 @@ void testRemoveItem() {
     cout << "RemoveItem method test passed." << endl;
 }
 
-void testClear() {
+void testClear()
+{
     cout << "Testing Clear method:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i);
     }
 
@@ -148,10 +165,12 @@ void testClear() {
     cout << "Clear method test passed." << endl;
 }
 
-void testGetAndIndexOf() {
+void testGetAndIndexOf()
+{
     cout << "Testing Get and IndexOf methods:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i * 2);
     }
 
@@ -162,10 +181,12 @@ void testGetAndIndexOf() {
     cout << "Get and IndexOf methods test passed." << endl;
 }
 
-void testContains() {
+void testContains()
+{
     cout << "Testing Contains method:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i * 2);
     }
 
@@ -175,10 +196,12 @@ void testContains() {
     cout << "Contains method test passed." << endl;
 }
 
-void testToString() {
+void testToString()
+{
     cout << "Testing ToString method:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i);
     }
 
@@ -188,18 +211,19 @@ void testToString() {
     cout << "ToString method test passed." << endl;
 }
 
-void testPointList() {
+void testPointList()
+{
     cout << "Testing DLinkedList with Point objects:" << endl;
-    DLinkedList<Point*> pointList(&DLinkedList<Point*>::free, &Point::pointEQ);
-    
+    DLinkedList<Point *> pointList(&DLinkedList<Point *>::free, &Point::pointEQ);
+
     pointList.add(new Point(1.0, 2.0, 3.0));
     pointList.add(new Point(4.0, 5.0, 6.0));
     pointList.add(new Point(7.0, 8.0, 9.0));
 
     assert(pointList.size() == 3);
     assert(pointList.contains(new Point(4.0, 5.0, 6.0)));
-    
-    Point* removed = pointList.removeAt(1);
+
+    Point *removed = pointList.removeAt(1);
     assert(removed->getX() == 4.0 && removed->getY() == 5.0 && removed->getZ() == 6.0);
     delete removed;
 
@@ -210,15 +234,18 @@ void testPointList() {
     cout << "DLinkedList with Point objects test passed." << endl;
 }
 
-void testIterator() {
+void testIterator()
+{
     cout << "Testing Iterator:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list.add(i);
     }
 
     int expected = 0;
-    for (DLinkedList<int>::Iterator it = list.begin(); it != list.end(); it++) {
+    for (DLinkedList<int>::Iterator it = list.begin(); it != list.end(); it++)
+    {
         assert(*it == expected);
         expected++;
     }
@@ -233,52 +260,89 @@ void testIterator() {
     cout << "Iterator test passed." << endl;
 }
 
-void testCopyFrom() {
+void testCopyFrom()
+{
     cout << "Testing copyFrom method:" << endl;
     DLinkedList<int> list1;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         list1.add(i);
     }
-    
+
     DLinkedList<int> list2;
     list2.copyFrom(list1);
-    
+
     assert(list2.size() == list1.size());
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         assert(list2.get(i) == list1.get(i));
     }
-    
+
     // Modify list2 to ensure deep copy
     list2.removeAt(0);
     list2.add(0, 10);
     assert(list1.get(0) != list2.get(0));
-    
+
     cout << "copyFrom method test passed." << endl;
 }
 
-void testRemoveInternalData() {
+void testRemoveInternalData()
+{
     cout << "Testing removeInternalData method:" << endl;
-    DLinkedList<int*> list;
-    for (int i = 0; i < 5; i++) {
+    DLinkedList<int *> list;
+    for (int i = 0; i < 5; i++)
+    {
         list.add(new int(i));
     }
-    
+
     list.removeInternalData();
-    
+
     assert(list.empty());
     assert(list.size() == 0);
-    
+
     cout << "removeInternalData method test passed." << endl;
 }
 
-void testDestructor() {
+void testDestructor()
+{
     cout << "Testing Destructor:" << endl;
-    DLinkedList<int*>* list = new DLinkedList<int*>(&DLinkedList<int*>::free);
-    for (int i = 0; i < 5; i++) {
+    DLinkedList<int *> *list = new DLinkedList<int *>(&DLinkedList<int *>::free);
+    for (int i = 0; i < 5; i++)
+    {
         list->add(new int(i));
     }
-    
+
     delete list; // This should call the destructor and free all memory
-    
+
     cout << "Destructor test passed (no crashes or memory leaks)." << endl;
 }
+
+class DLinkedListTestCases
+{
+
+public:
+    void test()
+    {
+        testConstructor();
+        testCopyConstructor();
+        testAssignmentOperator();
+        testAdd();
+        testRemoveAt();
+        testRemoveItem();
+        testClear();
+        testGetAndIndexOf();
+        testContains();
+        testToString();
+        testPointList();
+        testIterator();
+        testCopyFrom();
+        testRemoveInternalData();
+        testDestructor();
+        dlistDemo1();
+        dlistDemo2();
+        dlistDemo3();
+        dlistDemo4();
+        dlistDemo5();
+        dlistDemo6();
+    }
+};

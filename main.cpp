@@ -4,34 +4,18 @@
 #include <string>
 #include "list/listheader.h"
 #include "list/DLinkedListTestCases.h"
-#include "list/DLinkedListDemo.h"
+#include "list/XArrayListTestCases.h"
 
 using namespace std;
 
 
 int main(int argc, char** argv) {
     cout << "Assignment-1" << endl;
-    dlistDemo1();
-    dlistDemo2();
-    dlistDemo3();
-    dlistDemo4();
-    dlistDemo5();
-    dlistDemo6();
-    // testConstructor();
-    // testCopyConstructor();
-    // testAssignmentOperator();
-    // testAdd();
-    // testRemoveAt();
-    // testRemoveItem();
-    // testClear();
-    // testGetAndIndexOf();
-    // testContains();
-    // testToString();
-    // testPointList();
-    // testIterator();
-    // testCopyFrom();
-    // testRemoveInternalData();
-    // testDestructor();
+    // DLinkedListTestCases* dll_test = new DLinkedListTestCases();
+    // dll_test->test();
+    XArrayListTestCases* xarr_test = new XArrayListTestCases();
+    xarr_test->test();
+
     return 0;
 }
 
