@@ -22,13 +22,18 @@ using namespace std;
 
 void dlistDemo1(){
     List<int> dlist;
+    dlist.println();
     for(int i = 0; i< 20 ; i++)
         dlist.add(i, i*i);
     dlist.println();
     
+    dlist.removeAt(5);
+
     for(List<int>::Iterator it=dlist.begin(); it != dlist.end(); it++ )
         cout << *it << " ";
     cout << endl;
+    dlist.clear();
+    dlist.println();
 }
 void dlistDemo2(){
     DLinkedList<Point*> list1(&DLinkedList<Point*>::free, &Point::pointEQ);
