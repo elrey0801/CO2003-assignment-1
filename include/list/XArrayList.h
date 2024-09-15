@@ -202,9 +202,15 @@ void XArrayList<T>::copyFrom(const XArrayList<T> &list)
     this->clear();
     this->itemEqual = list.itemEqual;
     this->deleteUserData = list.deleteUserData;
-    this->capacity = list.capacity;
-    this->data = new T[this->capacity];
-    for(int i = 0; i < list.count; ++i) this->add(list.data[i]);
+    if(list.capacity > 0 || list.count > 0) {
+        this->capacity = list.count;
+        this->data = new T[this->capacity];
+        for(int i = 0; i < list.count; ++i) this->add(list.data[i]);
+    } else {
+        this->data = nullptr;
+        this->capacity = 0;
+        this->count = 0;
+    }   
 }
 
 template <class T>
@@ -224,7 +230,9 @@ template <class T>
 XArrayList<T>::XArrayList(const XArrayList<T> &list)
 {
     // TODO
-    this->data = new T[list.capacity];
+    this->data = nullptr;
+    this->capacity = 0;
+    this->count = 0;
     this->copyFrom(list);
 }
 
@@ -257,13 +265,14 @@ void XArrayList<T>::add(int index, T e)
 {
     // TODO
     if(index < 0 || index > this->count) throw std::out_of_range("Invalid index");
+    this->ensureCapacity(this->count);
     if(index == this->count) {
         this->add(e);
         return;
     }
-    this->ensureCapacity(this->count);
+    for(int i = this->count; i > index; --i) this->data[i] = this->data[i-1];
+    this->data[index] = e;
     this->count++;
-    memcpy(this->data + index + 1, this->data + index, (this->count - index) * sizeof(T));
 }
 
 template <class T>
@@ -271,8 +280,10 @@ T XArrayList<T>::removeAt(int index)
 {
     // TODO
     this->checkIndex(index);
-    memcpy(this->data + index, this->data + index + 1, (this->count - index) * sizeof(T));
+    T return_value = this->data[index];
+    for(int i = index; i < this->count - 1; ++i) this->data[i] = this->data[i+1];
     this->count--;
+    return return_value;
 }
 
 template <class T>
@@ -282,8 +293,7 @@ bool XArrayList<T>::removeItem(T item, void (*removeItemData)(T))
     for(int i = 0; i < this->count; ++i) {
         if(equals(this->data[i], item, this->itemEqual)) {
             if(removeItemData) removeItemData(this->data[i]);
-            memcpy(this->data + i, this->data + i + 1, (this->count - i) * sizeof(T));
-            this->count--;
+            this->removeAt(i);
             return true;
         }
     }
@@ -386,13 +396,18 @@ void XArrayList<T>::ensureCapacity(int index)
      */
     // TODO
     if(index < 0 || index > this->count) throw std::out_of_range("Invalid index");
-    if(index != this->count) return;
-    if(this->count + 1 < this->capacity) return;
-    this->capacity *= 3/2;
-    T* newDataPointer = new T[this->capacity];
-    memcpy(newDataPointer, this->data, this->count * sizeof(T));
-    this->data = newDataPointer;
-    delete[] newDataPointer;
+    if(index != this->count || this->count + 1 < this->capacity) return;
+    T* newDataPointer = nullptr;
+    try {
+        this->capacity *= 2;
+        newDataPointer = new T[this->capacity];
+        for(int i = 0; i < this->count; ++i) newDataPointer[i] = this->data[i];
+        delete[] this->data;
+        this->data = newDataPointer;
+    } catch (const std::bad_alloc& e) {
+        delete[] newDataPointer;
+    }
+
 }
 
 #endif /* XARRAYLIST_H */

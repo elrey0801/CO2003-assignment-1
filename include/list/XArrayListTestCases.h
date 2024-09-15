@@ -3,6 +3,7 @@
 #include <sstream>
 #include "XArrayList.h"
 #include "util/Point.h" // Assuming Point class is available for testing
+#include "XArrayListDemo.h"
 
 using namespace std;
 
@@ -29,12 +30,13 @@ void testXArrayListCopyConstructor()
     {
         list1.add(i);
     }
-
     XArrayList<int> list2(list1);
+    cout << "OK " << endl;
     assert(list2.size() == list1.size());
     for (int i = 0; i < 5; i++)
     {
         assert(list2.get(i) == list1.get(i));
+        
     }
 
     // Modify list2 to ensure deep copy
@@ -291,5 +293,9 @@ public:
         testXArrayListEnsureCapacity();
         testXArrayListCopyFrom();
         testXArrayListRemoveInternalData();
+        xlistDemo1();
+        xlistDemo2();
+        xlistDemo3();
+        xlistDemo4();
     }
 };
