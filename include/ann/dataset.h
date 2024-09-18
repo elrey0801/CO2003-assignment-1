@@ -74,6 +74,8 @@ public:
     TensorDataset(xt::xarray<DType> data, xt::xarray<LType> label){
         /* TODO: your code is here for the initialization
          */
+        this->data_shape = xt::shape(data);
+        this->label_shape = xt::shape(label);
     }
     /* len():
      *  return the size of dimension 0
