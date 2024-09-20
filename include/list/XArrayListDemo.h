@@ -31,6 +31,7 @@ void xlistDemo1(){
     int item = 120;
     int foundIdx = iList.indexOf(item);
     cout    << "lookup for " << item  << " found at: " << foundIdx << endl;
+    cout << "Demo 1 OK" << endl;
 }
 
 void xlistDemo2(){
@@ -38,6 +39,7 @@ void xlistDemo2(){
     alist.add(Point(23.2f, 25.4f));
     alist.add(Point(24.6f, 23.1f));  
     alist.println();
+    cout << "Demo 2 OK" << endl;
 }
 
 void xlistDemo3(){
@@ -50,6 +52,7 @@ void xlistDemo3(){
     
     cout << "result 1 : " << idx1 << endl;
     cout << "result 2 : " << idx2 << endl;
+    cout << "Demo 3 OK" << endl;
 }
 
 void xlistDemo4(){
@@ -74,7 +77,7 @@ void xlistDemo4(){
     list2.add(new Point(23.2f, 25.4f));
     list2.add(new Point(24.6f, 23.1f));  
     list2.add(new Point(12.5f, 22.3f)); 
-    
+    // list2.removeInternalData();
     for(XArrayList<Point*>::Iterator it = list2.begin(); it != list2.end(); it++)
         cout << **it << endl;
     
@@ -84,6 +87,7 @@ void xlistDemo4(){
                 << " indexOf returns: " << list2.indexOf(p2) << endl;
     
     delete p1; delete p2;
+    cout << "Demo 4 OK" << endl;
 }
 
 #endif /* XARRAYLISTDEMO_H */

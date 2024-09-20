@@ -11,8 +11,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
     cout << "Assignment-1" << endl;
-    // DLinkedListTestCases* dll_test = new DLinkedListTestCases();
-    // dll_test->test();
+    DLinkedListTestCases* dll_test = new DLinkedListTestCases();
+    dll_test->test();
     XArrayListTestCases* xarr_test = new XArrayListTestCases();
     xarr_test->test();
 

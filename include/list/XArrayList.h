@@ -222,7 +222,10 @@ void XArrayList<T>::removeInternalData()
      * Finally, the dynamic array itself is deallocated from memory.
      */
     // TODO
-    if(this->deleteUserData) this->deleteUserData(this);
+    // if(this->deleteUserData) 
+    //     this->deleteUserData(this);
+    // else
+    //     this->clear();
     this->clear();
 }
 
@@ -240,6 +243,7 @@ template <class T>
 XArrayList<T> &XArrayList<T>::operator=(const XArrayList<T> &list)
 {
     // TODO
+    this->clear();
     this->copyFrom(list);
     return *this;
 }
@@ -248,7 +252,14 @@ template <class T>
 XArrayList<T>::~XArrayList()
 {
     // TODO
-    delete[] this->data;
+    // if(this->deleteUserData) 
+    //     this->deleteUserData(this);
+    // else
+    //     delete[] this->data;
+    if(this->deleteUserData) 
+        this->deleteUserData(this);
+    if(this->data != nullptr)
+        delete[] data;
 }
 
 template <class T>
@@ -318,7 +329,10 @@ template <class T>
 void XArrayList<T>::clear()
 {
     // TODO
-    delete[] data;
+    if(this->deleteUserData) 
+        this->deleteUserData(this);
+    if(this->data != nullptr)
+        delete[] data;
     this->count = 0;
     this->data = new T[capacity];
 }
