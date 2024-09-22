@@ -242,7 +242,6 @@ template <class T>
 XArrayList<T> &XArrayList<T>::operator=(const XArrayList<T> &list)
 {
     // TODO
-    this->clear();
     this->copyFrom(list);
     return *this;
 }
@@ -405,7 +404,7 @@ void XArrayList<T>::ensureCapacity(int index)
      */
     // TODO
     if(index < 0 || index > this->count) throw std::out_of_range("Invalid index");
-    if(index != this->count || this->count + 1 < this->capacity) return;
+    if(index != this->count || this->count < this->capacity) return;
     T* newDataPointer = nullptr;
     try {
         this->capacity = (this->capacity + 1) * 2;
@@ -413,11 +412,12 @@ void XArrayList<T>::ensureCapacity(int index)
         if(this->data != nullptr) {
             for(int i = 0; i < this->count; ++i) 
                 newDataPointer[i] = this->data[i];
+            if(this->deleteUserData) this->deleteUserData(this);
             delete[] this->data;
         }
         this->data = newDataPointer;
     } catch (const std::bad_alloc& e) {
-        delete[] newDataPointer;
+        throw;
     }
 
 }

@@ -269,6 +269,7 @@ template <class T>
 DLinkedList<T> &DLinkedList<T>::operator=(const DLinkedList<T> &list)
 {
     // TODO
+    // if(&this == &list) return;
     this->copyFrom(list);
     return *this;
 }
@@ -298,8 +299,9 @@ void DLinkedList<T>::add(int index, T e)
 {
     // TODO
     if(index < 0 || index > this->count) throw std::out_of_range("Invalid index");
-    Node* ptr = this->head;
-    while(index--) ptr = ptr->next;
+    // Node* ptr = this->head;
+    // while(index--) ptr = ptr->next;
+    Node* ptr = this->getPreviousNodeOf(index);
     Node* newNode = new Node(e);
     newNode->next = ptr->next;
     newNode->prev = ptr;
@@ -324,7 +326,7 @@ typename DLinkedList<T>::Node *DLinkedList<T>::getPreviousNodeOf(int index)
         while(index--) ptr = ptr->next;
     } else {
         ptr = this->tail;
-        index = this->count - index;
+        index = this->count - index + 1;
         while(index--) ptr = ptr->prev;
     }
     return ptr;
@@ -335,13 +337,16 @@ T DLinkedList<T>::removeAt(int index)
 {
     // TODO
     if(index < 0 || index >= this->count) throw std::out_of_range("Invalid index");
-    Node* ptr = this->head->next, *prev = this->head;
-    while(index--) {
-        prev = ptr;
-        ptr = ptr->next;
-    }
+    // Node* ptr = this->head->next, *prev = this->head;
+    // while(index--) {
+    //     prev = ptr;
+    //     ptr = ptr->next;
+    // }
+    Node* prev = this->getPreviousNodeOf(index);
+    Node* ptr = prev->next;
     prev->next = ptr->next;
     ptr->next->prev = prev;
+
     T remove_data = ptr->data;
     delete ptr;
     this->count--;
@@ -387,8 +392,9 @@ T &DLinkedList<T>::get(int index)
 {
     // TODO
     if(index < 0 || index >= this->count) throw std::out_of_range("Invalid index");
-    Node* ptr = this->head->next;
-    while(index--) ptr = ptr->next;
+    // Node* ptr = this->head->next;
+    // while(index--) ptr = ptr->next;
+    Node* ptr = this->getPreviousNodeOf(index + 1);
     return ptr->data;
 }
 
@@ -466,6 +472,7 @@ void DLinkedList<T>::copyFrom(const DLinkedList<T> &list)
      * Iterates through the source list and adds each element, preserving the order of the nodes.
      */
     // TODO
+    if(this == &list) return;
     this->clear();
     this->deleteUserData = list.deleteUserData;
     this->itemEqual = list.itemEqual;
