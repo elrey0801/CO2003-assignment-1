@@ -94,8 +94,14 @@ void dlistDemo4(){
     dList.add(new Point(1.5, 3.5));
     dList.add(new Point(2.5, 4.5));
     dList.add(new Point(1.6, 3.1));
-    dList.println(&LpointPtr2Str);
     
+    
+    dList.clear();
+    dList.add(new Point(1.5, 3.5));
+    dList.add(new Point(2.5, 4.5));
+    dList.add(new Point(1.6, 3.1));
+    dList.println(&LpointPtr2Str);
+
     cout << "test for indexOf: " << endl;
     Point* p = new Point(1.6, 3.1);
     cout << *p << " at: " << dList.indexOf(p) << endl;

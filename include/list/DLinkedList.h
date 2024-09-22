@@ -277,10 +277,7 @@ template <class T>
 DLinkedList<T>::~DLinkedList()
 {
     // TODO
-    if(this->deleteUserData) 
-        this->deleteUserData(this);
-    else
-        this->clear();
+    this->clear();
     delete this->head;
     delete this->tail;
 }
@@ -327,7 +324,7 @@ typename DLinkedList<T>::Node *DLinkedList<T>::getPreviousNodeOf(int index)
         while(index--) ptr = ptr->next;
     } else {
         ptr = this->tail;
-        index -= this->count;
+        index = this->count - index;
         while(index--) ptr = ptr->prev;
     }
     return ptr;

@@ -272,6 +272,12 @@ void testXArrayListRemoveInternalData()
     assert(list.empty());
     assert(list.size() == 0);
 
+    for (int i = 0; i < 5; i++)
+    {
+        list.add(new int(i));
+    }
+    assert(list.size() == 5);
+
     cout << "XArrayList removeInternalData method test passed." << endl;
 }
 

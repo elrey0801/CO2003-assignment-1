@@ -169,11 +169,12 @@ void testGetAndIndexOf()
 {
     cout << "Testing Get and IndexOf methods:" << endl;
     DLinkedList<int> list;
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 15; i++)
     {
         list.add(i * 2);
     }
-
+    list.getPreviousNodeOf(5);
+    list.getPreviousNodeOf(12);
     assert(list.get(3) == 6);
     assert(list.indexOf(6) == 3);
     assert(list.indexOf(9) == -1);

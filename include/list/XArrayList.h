@@ -82,7 +82,6 @@ public:
             it++;
         }
     }
-
 public: ///// dont forget to set it back to protected
     void checkIndex(int index);     // check validity of index for accessing
     void ensureCapacity(int index); // auto-allocate if needed
@@ -183,6 +182,7 @@ XArrayList<T>::XArrayList(
     int capacity)
 {
     // TODO
+    if(capacity < 0) capacity = 10;
     this->capacity = capacity;
     this->deleteUserData = deleteUserData;
     this->itemEqual = itemEqual;
@@ -199,18 +199,15 @@ void XArrayList<T>::copyFrom(const XArrayList<T> &list)
      * Also duplicates user-defined comparison and deletion functions, if applicable.
      */
     // TODO
-    this->clear();
+    this->removeInternalData();
     this->itemEqual = list.itemEqual;
     this->deleteUserData = list.deleteUserData;
-    if(list.capacity > 0 || list.count > 0) {
+    if(list.count > 0) {
         this->capacity = list.count;
         this->data = new T[this->capacity];
-        for(int i = 0; i < list.count; ++i) this->add(list.data[i]);
-    } else {
-        this->data = nullptr;
-        this->capacity = 0;
-        this->count = 0;
-    }   
+        for(int i = 0; i < list.count; ++i) 
+            this->add(list.data[i]);
+    }  
 }
 
 template <class T>
@@ -222,11 +219,13 @@ void XArrayList<T>::removeInternalData()
      * Finally, the dynamic array itself is deallocated from memory.
      */
     // TODO
-    // if(this->deleteUserData) 
-    //     this->deleteUserData(this);
-    // else
-    //     this->clear();
-    this->clear();
+    if(this->deleteUserData) 
+        this->deleteUserData(this);
+    if(this->data != nullptr)
+        delete[] this->data;
+    this->count = 0;
+    this->capacity = 10;
+    this->data = new T[this->capacity];
 }
 
 template <class T>
@@ -234,8 +233,8 @@ XArrayList<T>::XArrayList(const XArrayList<T> &list)
 {
     // TODO
     this->data = nullptr;
-    this->capacity = 0;
-    this->count = 0;
+    this->itemEqual = nullptr;
+    this->deleteUserData = nullptr;
     this->copyFrom(list);
 }
 
@@ -252,13 +251,11 @@ template <class T>
 XArrayList<T>::~XArrayList()
 {
     // TODO
-    // if(this->deleteUserData) 
-    //     this->deleteUserData(this);
-    // else
-    //     delete[] this->data;
+    if(!this->data) 
+        return;
     if(this->deleteUserData) 
         this->deleteUserData(this);
-    if(this->data != nullptr)
+    if(this->data)
         delete[] data;
 }
 
@@ -331,10 +328,8 @@ void XArrayList<T>::clear()
     // TODO
     if(this->deleteUserData) 
         this->deleteUserData(this);
-    if(this->data != nullptr)
-        delete[] data;
     this->count = 0;
-    this->data = new T[capacity];
+    this->capacity = 10;
 }
 
 template <class T>
@@ -413,10 +408,13 @@ void XArrayList<T>::ensureCapacity(int index)
     if(index != this->count || this->count + 1 < this->capacity) return;
     T* newDataPointer = nullptr;
     try {
-        this->capacity *= 2;
+        this->capacity = (this->capacity + 1) * 2;
         newDataPointer = new T[this->capacity];
-        for(int i = 0; i < this->count; ++i) newDataPointer[i] = this->data[i];
-        delete[] this->data;
+        if(this->data != nullptr) {
+            for(int i = 0; i < this->count; ++i) 
+                newDataPointer[i] = this->data[i];
+            delete[] this->data;
+        }
         this->data = newDataPointer;
     } catch (const std::bad_alloc& e) {
         delete[] newDataPointer;
