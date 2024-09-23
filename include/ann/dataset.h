@@ -85,7 +85,7 @@ public:
     int len(){
         /* TODO: your code is here to return the dataset's length
          */
-        return 0; //remove it when complete
+        return this->data.shape()[0]; //remove it when complete
     }
     
     /* getitem:
@@ -94,15 +94,22 @@ public:
     DataLabel<DType, LType> getitem(int index){
         /* TODO: your code is here
          */
+        if(index < 0 || index >= this->len())
+            throw std::out_of_range("Invalid index");
+        auto i_data = xt::view(this->data, index);
+        auto i_label = xt::view(this->label, index);
+        return DataLabel<DType, LType>(i_data, i_label);
     }
     
     xt::svector<unsigned long> get_data_shape(){
         /* TODO: your code is here to return data_shape
          */
+        return this->data_shape;
     }
     xt::svector<unsigned long> get_label_shape(){
         /* TODO: your code is here to return label_shape
          */
+        return this->label_shape;
     }
 };
 
