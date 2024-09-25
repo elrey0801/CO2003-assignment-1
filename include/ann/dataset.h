@@ -76,8 +76,8 @@ public:
          */
         this->data = data;
         this->label = label;
-        this->data_shape = data.shape();
-        this->label_shape = label.shape();
+        this->data_shape = xt::svector<unsigned long>(data.shape().begin(), data.shape().end());
+        this->label_shape = xt::svector<unsigned long>(label.shape().begin(), label.shape().end());
     }
     /* len():
      *  return the size of dimension 0
