@@ -29,7 +29,9 @@ private:
     bool shuffle;
     bool drop_last;
     /*TODO: add more member variables to support the iteration*/
-    xvector<int> index_container;
+    xvector<int>* index_container = new xvector<int>();
+    int taken_range;
+
 
 public:
     DataLoader(Dataset<DType, LType>* ptr_dataset,
@@ -37,9 +39,30 @@ public:
             bool shuffle=true,
             bool drop_last=false){
         /*TODO: Add your code to do the initialization */
-        std::random_device rd;
-        std::mt19937 g(rd());
-        std::shuffle(index_container.begin(), index_container.end(), g);
+        this->ptr_dataset = ptr_dataset;
+        this->shuffle = shuffle;
+        this->drop_last = drop_last;
+        this->batch_size = batch_size;
+        this->taken_range = this->ptr_dataset->len();
+        if(drop_last)
+            this->taken_range = (this->taken_range / batch_size) * batch_size;
+        for(int i = 0; i < this->taken_range; ++i)
+            index_container->add(i);
+
+        // cout << "Before:::" << this->index_container->toString() << endl;
+
+        if(shuffle) {
+            std::random_device seed;
+            std::mt19937 generator(seed());
+            for(int i = this->taken_range - 1; i > 0; --i) {
+                std::uniform_int_distribution<> dis(0, i);
+                int swap_index = dis(generator);
+                int temp = this->index_container->get(i);
+                this->index_container->get(i) = this->index_container->get(swap_index);
+                this->index_container->get(swap_index) = temp;
+            }
+        }
+        // cout << "After:::" << this->index_container->toString() << endl;
     }
     virtual ~DataLoader(){}
 
@@ -51,11 +74,11 @@ public:
     /*TODO: Add your code here to support iteration on batch*/
     
     Iterator begin() {
-
+        return Iterator(this, 0);
     }
 
     Iterator end() {
-
+        return Iterator(this, this->taken_range);
     }
 
     class Iterator {
@@ -64,9 +87,9 @@ public:
         int data_index;
     
     public:
-        Iterator(DataLoader<DType, LType>* dataloader) {
+        Iterator(DataLoader<DType, LType>* dataloader, int data_index) {
             this->dataloader = dataloader;
-            this->data_index = 0;
+            this->data_index = data_index;
         }
         bool operator!=(const Iterator& iterator) {
             return this->data_index != iterator.data_index;
@@ -75,9 +98,22 @@ public:
             this->data_index += this->dataloader->batch_size;
             return *this;
         }
-        Batch<DType, LType> &operator*() {
+        Batch<DType, LType> operator*() {
             int end_batch_index = min(this->data_index + this->dataloader->batch_size, this->dataloader->ptr_dataset->len());
-            
+            auto data_shape = this->dataloader->ptr_dataset->get_data_shape();
+            auto label_shape = this->dataloader->ptr_dataset->get_label_shape();
+            data_shape[0] = end_batch_index - this->data_index;
+            label_shape[0] = end_batch_index - this->data_index;
+            xt::xarray<DType> batch_data = xt::zeros<DType>(data_shape);
+            xt::xarray<LType> batch_label = xt::zeros<LType>(label_shape);
+
+            for(int i = this->data_index; i < end_batch_index; i++) {
+                auto item = this->dataloader->ptr_dataset->getitem(this->dataloader->index_container->get(i));
+                xt::view(batch_data, i - this->data_index) = item.getData();
+                xt::view(batch_label, i - this->data_index) = item.getLabel();
+            }
+
+            return Batch<DType, LType>(batch_data, batch_label);
         }
     };
 
