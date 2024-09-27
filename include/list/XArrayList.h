@@ -82,7 +82,7 @@ public:
             it++;
         }
     }
-public: ///// dont forget to set it back to protected
+protected:
     void checkIndex(int index);     // check validity of index for accessing
     void ensureCapacity(int index); // auto-allocate if needed
 

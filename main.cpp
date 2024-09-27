@@ -3,12 +3,12 @@
 #include <sstream>
 #include <string>
 #include "list/listheader.h"
-#include "list/DLinkedListTestCases.h"
-#include "list/XArrayListTestCases.h"
-#include "list/MoreTest.h"
+// #include "list/DLinkedListTestCases.h"
+// #include "list/XArrayListTestCases.h"
+// #include "list/MoreTest.h"
 #include "ann/dataloader.h"
 #include "ann/dataset.h"
-#include "ann/xtensor_lib.h"
+#include "ann/xtensor_lib.cpp"
 
 using namespace std;
 
@@ -52,6 +52,7 @@ int main(int argc, char **argv)
         // // xt::svector<unsigned long> test = xt::svector<unsigned long>(X.shape().begin(), X.shape().end());
         // // cout << shape2str(test) << endl;
         cout << shape2str(xt::svector<unsigned long>(batch.getData().shape().begin(), batch.getData().shape().end())) << endl;
+        cout << shape2str(xt::svector<unsigned long>(batch.getLabel().shape().begin(), batch.getLabel().shape().end())) << endl;
         // cout << shape2str(xt::svector<unsigned long>(batch_label_shape.begin(), batch_label_shape.end())) << endl;
     }
 

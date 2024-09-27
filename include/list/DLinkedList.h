@@ -123,7 +123,7 @@ public:
         return BWDIterator(this, false);
     }
 
-public: ///// dont forget to set it back to protected
+protected:
     static bool equals(T &lhs, T &rhs, bool (*itemEqual)(T &, T &))
     {
         if (itemEqual == 0)
