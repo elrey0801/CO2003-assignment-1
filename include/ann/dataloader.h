@@ -95,7 +95,8 @@ public:
             return this->data_index != iterator.data_index;
         }
         Iterator &operator++() {
-            this->data_index += this->dataloader->batch_size;
+            this->data_index = min(this->data_index + this->dataloader->batch_size, this->dataloader->ptr_dataset->len());
+            // this->data_index += this->dataloader->batch_size;
             return *this;
         }
         Batch<DType, LType> operator*() {
@@ -113,7 +114,7 @@ public:
                 xt::view(batch_label, i - this->data_index) = item.getLabel();
             }
 
-            return Batch<DType, LType>(batch_data, batch_label);
+            return Batch<DType, LType>(batch_data, batch_label);        
         }
     };
 

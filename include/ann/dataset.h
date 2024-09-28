@@ -52,8 +52,11 @@ public:
     
     virtual int len()=0;
     virtual DataLabel<DType, LType> getitem(int index)=0;
-    virtual xt::svector<unsigned long> get_data_shape()=0;
-    virtual xt::svector<unsigned long> get_label_shape()=0;
+    // temperary change to size_t
+    virtual xt::svector<size_t> get_data_shape()=0;
+    virtual xt::svector<size_t> get_label_shape()=0;
+    // virtual xt::svector<unsigned long> get_data_shape()=0;
+    // virtual xt::svector<unsigned long> get_label_shape()=0;
     
 };
 
@@ -63,7 +66,9 @@ class TensorDataset: public Dataset<DType, LType>{
 private:
     xt::xarray<DType> data;
     xt::xarray<LType> label;
-    xt::svector<unsigned long> data_shape, label_shape;
+    // temperary change to size_t
+    // xt::svector<unsigned long> data_shape, label_shape;
+    xt::svector<size_t> data_shape, label_shape;
     
 public:
     /* TensorDataset: 
@@ -76,8 +81,10 @@ public:
          */
         this->data = data;
         this->label = label;
-        this->data_shape = xt::svector<unsigned long>(data.shape().begin(), data.shape().end());
-        this->label_shape = xt::svector<unsigned long>(label.shape().begin(), label.shape().end());
+        // this->data_shape = xt::svector<unsigned long>(data.shape().begin(), data.shape().end());
+        // this->label_shape = xt::svector<unsigned long>(label.shape().begin(), label.shape().end());
+        this->data_shape = data.shape();
+        this->label_shape = label.shape();
     }
     /* len():
      *  return the size of dimension 0
@@ -101,12 +108,16 @@ public:
         return DataLabel<DType, LType>(i_data, i_label);
     }
     
-    xt::svector<unsigned long> get_data_shape(){
+    // temperary change to size_t
+    // xt::svector<unsigned long> get_data_shape(){
+    xt::svector<size_t> get_data_shape(){
         /* TODO: your code is here to return data_shape
          */
         return this->data_shape;
     }
-    xt::svector<unsigned long> get_label_shape(){
+    // temperary change to size_t
+    // xt::svector<unsigned long> get_label_shape(){
+    xt::svector<size_t> get_label_shape(){
         /* TODO: your code is here to return label_shape
          */
         return this->label_shape;

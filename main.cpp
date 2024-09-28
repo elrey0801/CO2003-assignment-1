@@ -13,19 +13,6 @@
 using namespace std;
 
 
-// string shape2str(xt::svector<unsigned long> vec){
-//     stringstream ss;
-//     ss << "(";
-//     for(int idx=0; idx < vec.size(); idx++){
-//         ss << vec[idx] << ", ";
-//     }
-//     string res = ss.str();
-//     if(vec.size() > 1) res = res.substr(0, res.rfind(','));
-//     else res = res.substr(0, res.rfind(' '));
-//     return res + ")";
-// }
-
-
 int main(int argc, char **argv)
 {
     // cout << "Assignment-1" << endl;
@@ -37,24 +24,17 @@ int main(int argc, char **argv)
     // dll_more_test->runAllTests();
     // XArrayListTest* xarr_more_test = new XArrayListTest();
     // xarr_more_test->runAllTests();
-    int nsamples = 100;
+    int nsamples = 91;
     xt ::xarray<double> X = xt ::random ::randn<double>({nsamples, 10});
     xt ::xarray<double> T = xt ::random ::randn<double>({nsamples, 5});
     TensorDataset<double, double> ds(X, T);
-    DataLoader<double, double> loader(&ds, 30, true, true);
+    DataLoader<double, double> loader(&ds, 30, true, false);
     for (auto batch : loader)
     {
-        // cout << shape2str(batch.getData().shape()) << endl ;
-        
-        
-        // auto batch_data_shape = batch.getData().shape();
-        // auto batch_label_shape = batch.getLabel().shape();
-        // // xt::svector<unsigned long> test = xt::svector<unsigned long>(X.shape().begin(), X.shape().end());
-        // // cout << shape2str(test) << endl;
-        cout << shape2str(xt::svector<unsigned long>(batch.getData().shape().begin(), batch.getData().shape().end())) << endl;
-        cout << shape2str(xt::svector<unsigned long>(batch.getLabel().shape().begin(), batch.getLabel().shape().end())) << endl;
-        // cout << shape2str(xt::svector<unsigned long>(batch_label_shape.begin(), batch_label_shape.end())) << endl;
+        // cout << shape2str(xt::svector<unsigned long>(batch.getData().shape().begin(), batch.getData().shape().end())) << endl;
+        // cout << shape2str(xt::svector<unsigned long>(batch.getLabel().shape().begin(), batch.getLabel().shape().end())) << endl;
+        cout << shape2str(batch.getData().shape()) << endl;
+        cout << shape2str(batch.getLabel().shape()) << endl;
     }
-
     return 0;
 }
