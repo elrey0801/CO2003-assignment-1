@@ -24,11 +24,11 @@ int main(int argc, char **argv)
     // dll_more_test->runAllTests();
     // XArrayListTest* xarr_more_test = new XArrayListTest();
     // xarr_more_test->runAllTests();
-    int nsamples = 91;
+    int nsamples = 90;
     xt ::xarray<double> X = xt ::random ::randn<double>({nsamples, 10});
     xt ::xarray<double> T = xt ::random ::randn<double>({nsamples, 5});
     TensorDataset<double, double> ds(X, T);
-    DataLoader<double, double> loader(&ds, 30, true, false);
+    DataLoader<double, double> loader(&ds, 31, true, false);
     for (auto batch : loader)
     {
         // cout << shape2str(xt::svector<unsigned long>(batch.getData().shape().begin(), batch.getData().shape().end())) << endl;

@@ -95,12 +95,12 @@ public:
             return this->data_index != iterator.data_index;
         }
         Iterator &operator++() {
-            this->data_index = min(this->data_index + this->dataloader->batch_size, this->dataloader->ptr_dataset->len());
+            this->data_index = min(this->data_index + this->dataloader->batch_size, this->dataloader->taken_range);
             // this->data_index += this->dataloader->batch_size;
             return *this;
         }
         Batch<DType, LType> operator*() {
-            int end_batch_index = min(this->data_index + this->dataloader->batch_size, this->dataloader->ptr_dataset->len());
+            int end_batch_index = min(this->data_index + this->dataloader->batch_size, this->dataloader->taken_range);
             auto data_shape = this->dataloader->ptr_dataset->get_data_shape();
             auto label_shape = this->dataloader->ptr_dataset->get_label_shape();
             data_shape[0] = end_batch_index - this->data_index;
