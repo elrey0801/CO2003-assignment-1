@@ -125,6 +125,12 @@ public:
 };
 
 
+template<typename DType, typename LType>
+class ImageFolderDataset : public Dataset<DType, LType> {
+    
+};
+
+
 
 #endif /* DATASET_H */
 

@@ -15,7 +15,6 @@
 #include "ann/xtensor_lib.h"
 #include "ann/dataset.h"
 #include "list/listheader.h"
-#include <random>
 
 using namespace std;
 
@@ -47,28 +46,17 @@ public:
         this->taken_range = this->ptr_dataset->len();
         if(drop_last)
             this->taken_range = (this->taken_range / batch_size) * batch_size;
-        // for(int i = 0; i < this->taken_range; ++i)
-        //     index_container->add(i);
+
         this->index_container = xt::arange(this->taken_range);
 
-        cout << "Before:::" << endl;
-        for(auto n : this->index_container) cout << n << " ";
+        // cout << "Before:::" << endl;
+        // for(auto n : this->index_container) cout << n << " ";
 
-        if(shuffle) {
-            // std::random_device seed;
-            // std::mt19937 generator(seed());
-            // for(int i = this->taken_range - 1; i > 0; --i) {
-            //     std::uniform_int_distribution<> dis(0, i);
-            //     int swap_index = dis(generator);
-            //     int temp = this->index_container->get(i);
-            //     this->index_container->get(i) = this->index_container->get(swap_index);
-            //     this->index_container->get(swap_index) = temp;
-            // }
+        if(shuffle)
             xt::random::shuffle(this->index_container);
-        }
         
-        cout << "After:::" << endl;
-        for(auto n : this->index_container) cout << n << " ";
+        // cout << "After:::" << endl;
+        // for(auto n : this->index_container) cout << n << " ";
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -101,7 +89,6 @@ public:
         }
         Iterator &operator++() {
             this->data_index = min(this->data_index + this->dataloader->batch_size, this->dataloader->taken_range);
-            // this->data_index += this->dataloader->batch_size;
             return *this;
         }
         Batch<DType, LType> operator*() {
@@ -114,7 +101,6 @@ public:
             xt::xarray<LType> batch_label = xt::zeros<LType>(label_shape);
 
             for(int i = this->data_index; i < end_batch_index; i++) {
-                // auto item = this->dataloader->ptr_dataset->getitem(this->dataloader->index_container->get(i));
                 auto item = this->dataloader->ptr_dataset->getitem(this->dataloader->index_container(i));
                 xt::view(batch_data, i - this->data_index) = item.getData();
                 xt::view(batch_label, i - this->data_index) = item.getLabel();
