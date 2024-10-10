@@ -104,7 +104,9 @@ public:
         if(index < 0 || index >= this->len())
             throw std::out_of_range("Invalid index");
         auto i_data = xt::view(this->data, index);
-        auto i_label = xt::view(this->label, index);
+        xt::xarray<LType> i_label;
+        if(this->label_shape.size() != 0)
+            i_label = xt::view(this->label, index);
         return DataLabel<DType, LType>(i_data, i_label);
     }
     
@@ -125,10 +127,10 @@ public:
 };
 
 
-template<typename DType, typename LType>
-class ImageFolderDataset : public Dataset<DType, LType> {
+// template<typename DType, typename LType>
+// class ImageFolderDataset : public Dataset<DType, LType> {
     
-};
+// };
 
 
 
